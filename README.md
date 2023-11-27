@@ -25,4 +25,5 @@ h) Indique cuál de los dos métodos cree usted que es mejor, el de la versión 
 -----
 
 En P1 estan realizados los incisos a y b.
+
 En P2 estan realizados los incisos c, d y e.
