@@ -34,8 +34,18 @@ while True:
 
     if choice == '1':
         # Mostrar imágenes promedio de todos los dígitos
-        for i in range(10):
-            mostrar_average_image(i)
+        fig, axs = plt.subplots(2, 5, figsize=(10,5))
+
+        for digit in range(10):
+            row = digit // 5
+            col = digit % 5
+            ax = axs[row, col]
+            im = ax.imshow(average_images[digit], cmap='gray', vmin=0, vmax=16)
+            ax.set_title(f'Promedio #{digit}')
+        cbar = fig.colorbar(im, ax=axs, orientation='vertical', ticks=np.arange(0, 17, 1))
+        cbar.set_label('Valor')
+        plt.show()
+
     elif choice == '2':
         # Solicitar al usuario el dígito específico
         digito = int(input("Ingrese el dígito (0-9): "))
