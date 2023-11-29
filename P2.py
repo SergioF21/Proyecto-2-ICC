@@ -2,56 +2,60 @@ import numpy as np
 from PIL import Image
 from sklearn.datasets import load_digits
 from scipy.spatial.distance import cdist
+import cv2
+import numpy as np
+from sklearn import datasets
 
-# Función para convertir valores entre 0 y 255 a valores entre 0 y 16
-def convert_values(image):
-    return (16 / 255) * image
+# ----------------------
+#   ITEM C
+# ----------------------
 
-# Cargar el conjunto de datos digits
-digits = load_digits()
+print("\nEste es el listado de todas las imágenes aplanadas: \n")
+digitos = datasets.load_digits()
+dataset_digits = digitos.data
 
-# Obtener las imágenes y las etiquetas
-images = digits.images
-labels = digits.target
+print(dataset_digits)
 
-# Ruta de la imagen con el número dibujado
-image_path = 'numeros_paint/numero1_v3.png'  # Cambia esto a la ruta de tu imagen
+def proceso(image):
+    # Leer la imagen en escala de grises
+    img_array = cv2.imread(image, cv2.IMREAD_GRAYSCALE)
 
-# Cargar la imagen y convertirla a escala de grises
-image = Image.open(image_path).convert('L')
+    # Reducción de tamaño a 8x8
+    new_img = cv2.resize(img_array, (8, 8))
 
-# Redimensionar la imagen a 8x8
-image_resized = image.resize((8, 8))
+    # Invertir valores y escalar a la escala de 0 a 16
+    new_img = (new_img * -1 + 255) * 16 / 255
 
-# Convertir la imagen a una matriz de píxeles
-pixel_matrix = np.array(image_resized)
+    new_img = new_img.astype(int)
 
-# Convertir valores entre 0 y 255 a valores entre 0 y 16
-pixel_matrix = convert_values(pixel_matrix)
+    return new_img
 
-# Normalizar las matrices de píxeles del nuevo dígito y de los dígitos en el conjunto de datos
-pixel_matrix_normalized = pixel_matrix.flatten() / 16.0
-images_normalized = images.reshape(len(images), -1) / 16.0
+# Ruta de la imagen proporcionada
+image = "img/7.jpg"
 
-'''
-print("Matriz de píxeles normalizada del nuevo dígito:")
-print(pixel_matrix_normalized)
+# Preprocesa la imagen de entrada
+img_procesada = proceso(image)
+
+print("\nImagen procesada : \n")
+print(img_procesada)
+
 '''
 
 # Calcular las distancias euclidianas utilizando cdist
 distances = cdist(pixel_matrix_normalized.reshape(1, -1), images_normalized, metric='euclidean')
 
-'''
+
 print("Matrices de píxeles normalizadas de los dígitos más cercanos:")
 for i, idx in enumerate(np.argsort(distances.flatten())[:3]):
     print(images_normalized[idx].reshape(8, 8))
 
 print("Matriz de distancias completa:")
 print(distances)
-'''
+
 # Obtener los índices de los 3 dígitos más cercanos
 closest_indices = np.argsort(distances.flatten())[:3]
 
 print("Los 3 dígitos más cercanos son:")
 for i, idx in enumerate(closest_indices):
     print(f"{i + 1}. Dígito: {labels[idx]}, Distancia Euclidiana: {distances[0][idx]}")
+'''

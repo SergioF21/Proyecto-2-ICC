@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.datasets import load_digits
 
+
 # Cargar el conjunto de datos digits
 digitos = load_digits()
 
