@@ -1,0 +1,8 @@
+<!-- list_images.html -->
+{% for image in images %}
+    <div>
+        <img src="{{ url_for('static', filename='uploaded_images/' + image.file_path) }}" alt="Uploaded Image">
+        <p>Uploaded on: {{ image.timestamp }}</p>
+        <p>Analysis Result: {{ image.analysis_result }}</p>
+    </div>
+{% endfor %}

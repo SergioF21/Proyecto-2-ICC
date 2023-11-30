@@ -104,7 +104,38 @@ print(img_procesada)
 def euclidean_distance(img1, img2):
     # Calcular la distancia euclidiana entre dos imágenes
     return np.sqrt(np.sum((img1 - img2) ** 2))
+# ----------------------# # ----------------------
+#   ITEM G
+# ----------------------
+    
+          
+def calcular_distancia_a_promedios(new_digit, average_images):
+    min_distance = float('inf')
+    closest_average_digit = None
 
+    for i in range(10):
+        distance = euclidean_distance(new_digit.flatten(), average_images[i].flatten())
+        if distance < min_distance:
+            min_distance = distance
+            closest_average_digit = i
+
+    return closest_average_digit, min_distance
+# ----------------------
+#   ITEM G
+# ----------------------
+    
+          
+def calcular_distancia_a_promedios(new_digit, average_images):
+    min_distance = float('inf')
+    closest_average_digit = None
+
+    for i in range(10):
+        distance = euclidean_distance(new_digit.flatten(), average_images[i].flatten())
+        if distance < min_distance:
+            min_distance = distance
+            closest_average_digit = i
+
+    return closest_average_digit, min_distance
 def find_most_similar_digits(new_digit, dataset_digits):
     # Inicializar una lista para almacenar las distancias y los índices de los dígitos
     distances = []
@@ -141,39 +172,40 @@ for i, index in enumerate(closest_indices):
 #   ITEM F
 # ----------------------
 
-# diccionario para almacenar las frecuencias de los digitos
-digit_frequencies = {}
+def calculate_digit_frequencies(closest_indices, labels):
+    # Diccionario para almacenar las frecuencias de los dígitos
+    digit_frequencies = {}
 
-# contar y actualizar frecuencias de los digitos
-for idx in closest_indices:
-    label = labels[idx]
-    if label in digit_frequencies:
-        digit_frequencies[label] += 1
-    else:
-        digit_frequencies[label] = 1
+    # Contar y actualizar frecuencias de los dígitos
+    for idx in closest_indices:
+        label = labels[idx]
+        digit_frequencies[label] = digit_frequencies.get(label, 0) + 1
 
-# buscar el que se repite mas
-most_common = 0
-max_count = 0
-for label, count in digit_frequencies.items():
-    if count > max_count:
-        most_common = label
-        max_count = count
-      
-#si 2 o 3 son iguales
-if max_count >= 2: 
-    print("\n Soy la inteligencia artificial, y he detectado que el dígito ingresado corresponde al número" , most_common)
-else:
-  # Busca el que tenga la distancia eclidiana mas pequenia
+    # Buscar el dígito que se repite más
+    most_common = max(digit_frequencies, key=digit_frequencies.get)
+    max_count = digit_frequencies[most_common]
+
+    return most_common, max_count
+
+def find_closest_digit_by_distance(closest_distances, closest_indices, labels):
+    # Buscar el dígito con la distancia euclidiana más pequeña
     min_distance = min(closest_distances)
     min_distance_index = closest_distances.index(min_distance)
     closest_digit = labels[closest_indices[min_distance_index]]
+
+    return closest_digit
+
+
+#USO DE FUNCIONES
+
+most_common_digit, max_count = calculate_digit_frequencies(closest_indices, labels)
+
+if max_count >= 2:
+    print("\n Soy la inteligencia artificial, y he detectado que el dígito ingresado corresponde al número", most_common_digit)
+else:
+    closest_digit = find_closest_digit_by_distance(closest_distances, closest_indices, labels)
     print("\n Soy la inteligencia artificial, y he detectado que el dígito ingresado corresponde al número", closest_digit)
 
-#imprimir
-closest_digit = labels[min_distance_index]
-print("\n Soy la inteligencia artificial, y he detectado que el dígito ingresado corresponde al número", closest_digit)
-      
 # ----------------------
 #   ITEM G
 # ----------------------
@@ -192,9 +224,9 @@ def calcular_distancia_a_promedios(new_digit, average_images):
     return closest_average_digit, min_distance
 
 closest_average_digit, min_distance_to_average = calcular_distancia_a_promedios(img_procesada, average_images)
-print(f"\nSoy la inteligencia artificial versión 2, y he
+print(f"""\nSoy la inteligencia artificial versión 2, y he
 detectado que el dígito ingresado corresponde al número {closest_average_digit}”, donde {closest_average_digit} es 
-un número entre 0 y 9.")
+un número entre 0 y 9.""")
 
             
 
